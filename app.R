@@ -1,5 +1,4 @@
 
-suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(StatsBombR))
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(shiny))
