@@ -7,7 +7,7 @@ library(dplyr)
 statsbomb_flank_attack = function(matchData,team_name,sub_title){
   require(dplyr)
   require(ggplot2)
-  `%notin%` <- Negate(`%in%`)
+  `%notin%` = Negate(`%in%`)
   # Selecting all attempted carries, passes and excluding injury-clearance-passes (fairplay).
   matchData = dplyr::filter(matchData,type.name %in% c("Carry","Pass") & type.id %notin% c(74))
   data <- NULL
