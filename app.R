@@ -98,7 +98,7 @@ statsbomb_flank_attack = function(matchData,team_name,sub_title){
               axis.text.y = element_blank(),
               plot.background = element_rect(fill = "#f9f9fa"),
               plot.title = element_text(colour = title_color,
-                                        size = 20, face ="bold", hjust = 0.5),
+                                        size = 26, face ="bold", hjust = 0.5),
               plot.subtitle = element_text(colour = title_color,
                                            size = 12, hjust = 0.5),
               axis.title.x = element_blank(),
@@ -135,7 +135,7 @@ statsbomb_flank_attack = function(matchData,team_name,sub_title){
         annotation_custom(grid::rasterGrob(png::readPNG("./statsbomb.png")
                                            , interpolate = TRUE)
                           , xmin = 45, xmax = 50, ymin = 80, ymax = 100)+
-        geom_text(aes(48,10,label = paste("@npranav10")),color=viz_color,size=5)
+        geom_text(aes(48,10,label = paste("@npranav10")),color=viz_color,size=8)
     #plotly::ggplotly(p)
     p
 }
@@ -150,7 +150,10 @@ seasonid = Comps$season_id[Comps$compname=="FA Women's Super League 2019/2020"]
 
 Comp = Comps %>% filter(competition_id==Comp & season_id==seasonid)
 Matches <- StatsBombR::FreeMatches(Comp)
-Matches = dplyr::mutate(Matches,game=paste(Matches$home_team.home_team_name,"vs",Matches$away_team.away_team_name,sep = " "))
+Matches = dplyr::mutate(Matches,game=paste(iconv(Matches$home_team.home_team_name,from = "UTF-8",to="ASCII//TRANSLIT")
+                                           ,"vs",
+                                           iconv(Matches$away_team.away_team_name,from = "UTF-8",to="ASCII//TRANSLIT")
+                                           ,sep = " "))
 mid = Matches$game[1]
 home = Matches$home_team.home_team_name[Matches$game==mid]
 away = Matches$away_team.away_team_name[Matches$game==mid]
@@ -182,7 +185,7 @@ ui <- dashboardPage(
             <h3><u>How to interpret the plot:</u></h3>
             <ul>
             <li>Height of the arrow represents the avg depth of attempted entries</li>
-            <li>Color Scale of the arrow represnts the success % of attempted entries</li>
+            <li>Color Scale of the arrow represents the success % of attempted entries</li>
             <li>The numbers in % represents the distribution of all entries corresponding
             to Left, Center, Right sections of the Final 3rd.</li>
 
@@ -202,11 +205,15 @@ server <- function(input, output,session) {
 
     # Observing changes in Competiton selection and updating match names of the comp
     observeEvent(input$competition,{
-        Comp = Comps$competition_id[Comps$compname==input$competition]
-        Comp = Comps %>% filter(competition_id==Comp)
+        Compid = Comps$competition_id[Comps$compname==input$competition]
+        seasonid = Comps$season_id[Comps$compname==input$competition]
+        Comp = Comps %>% filter(competition_id==Compid & season_id==seasonid)
         Matches <- FreeMatches(Comp)
-        Matches = dplyr::mutate(Matches,game=paste(Matches$home_team.home_team_name,"vs",Matches$away_team.away_team_name,sep = " "))
-
+        print(paste("Competition has ",nrow(Matches)," matches"))
+        Matches = dplyr::mutate(Matches,game=paste(iconv(Matches$home_team.home_team_name,from = "UTF-8",to="ASCII//TRANSLIT")
+                                                   ,"vs",
+                                                   iconv(Matches$away_team.away_team_name,from = "UTF-8",to="ASCII//TRANSLIT")
+                                                   ,sep = " "))
         updateSelectInput(session, "match",
                           label = "Match",
                           choices = Matches$game,
@@ -226,15 +233,20 @@ server <- function(input, output,session) {
 
         Comp = Comps %>% filter(competition_id==Comp & season_id==seasonid)
         Matches <- FreeMatches(Comp)
-        Matches = dplyr::mutate(Matches,game=paste(Matches$home_team.home_team_name,"vs",Matches$away_team.away_team_name,sep = " "))
+        Matches = dplyr::mutate(Matches,game=paste(iconv(Matches$home_team.home_team_name,from = "UTF-8",to="ASCII//TRANSLIT")
+                                                   ,"vs",
+                                                   iconv(Matches$away_team.away_team_name,from = "UTF-8",to="ASCII//TRANSLIT")
+                                                   ,sep = " "))
         mid = Matches$match_id[Matches$game==x]
+        print(paste("Competition has ",nrow(Matches)," matches"))
+
         home = Matches$home_team.home_team_name[Matches$match_id==mid]
         away = Matches$away_team.away_team_name[Matches$match_id==mid]
         updateSelectInput(session, "team",
                            choices = c(home,away),
                            selected =home
         )
-        print(paste(home," vs ",away))
+        print(paste("Home: ",home," vs Away:",away))
 
     })
     observeEvent(input$do,withProgress(message = 'Making plot', value = 0,{
@@ -244,7 +256,10 @@ server <- function(input, output,session) {
         Comp <- Comps %>% dplyr::filter(competition_id==compid & season_id==seasonid)
         incProgress(0.16)
         Matches <- FreeMatches(Comp)
-        Matches = dplyr::mutate(Matches,game=paste(Matches$home_team.home_team_name,"vs",Matches$away_team.away_team_name,sep = " "))
+        Matches = dplyr::mutate(Matches,game=paste(iconv(Matches$home_team.home_team_name,from = "UTF-8",to="ASCII//TRANSLIT")
+                                                   ,"vs",
+                                                   iconv(Matches$away_team.away_team_name,from = "UTF-8",to="ASCII//TRANSLIT")
+                                                   ,sep = " "))
         incProgress(0.16)
         matchid = Matches$match_id[Matches$game==input$match]
         Matches = Matches %>% filter(match_id==matchid)
@@ -257,7 +272,13 @@ server <- function(input, output,session) {
         incProgress(0.16)
         output$flank_attacks <- renderPlot({
             statsbomb_flank_attack(matchData,input$team,
-                                       paste(Matches$game,"-",Matches$season.season_name,Matches$competition.competition_name))
+                                       paste(Matches$game,
+                                             " - ",
+                                             Matches$season.season_name,
+                                             Matches$competition.competition_name,
+                                             " - ",
+                                             format(as.Date(Matches$match_date), "%d %B %Y")
+                                       ))
         },width = "auto")
         incProgress(0.36)
     })
