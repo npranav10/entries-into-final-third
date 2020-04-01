@@ -74,7 +74,7 @@ statsbomb_flank_attack = function(matchData,team_name,sub_title){
     pitch_line_color = "black"
     title_color = "black"
     viz_color = "black"
-    ggplot() +
+    p = ggplot() +
     labs(title = paste(team_name,"- Entries into Final 3rd"),
          subtitle = sub_title)+
     coord_flip() +
@@ -139,6 +139,7 @@ statsbomb_flank_attack = function(matchData,team_name,sub_title){
     geom_text(aes(103,15,label = paste("Height: Avg Depth (Attempts)")),color=viz_color,size=4)+
     geom_text(aes(103,50,label = paste("Color Scale: Success % ")),color=viz_color,size=4)+
     geom_text(aes(103,85,label = paste("Number(%): Distribution (Attempts)")),color=viz_color,size=4)
+    plot(p)
   return(data)
 }
 
