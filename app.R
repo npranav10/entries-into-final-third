@@ -74,70 +74,72 @@ statsbomb_flank_attack = function(matchData,team_name,sub_title){
     pitch_line_color = "black"
     title_color = "black"
     viz_color = "black"
-    p = ggplot() +
-        labs(title = paste(team_name,"- Entries into Final 3rd"),
-             subtitle = sub_title)+
-        coord_flip() +
-        geom_rect(aes(xmin = 100, xmax = 100.2, ymin = 44.2, ymax = 55.8), fill = pitch_line_color, colour =pitch_line_color , size = 0.5) +
-        geom_rect(aes(xmin = 50, xmax = 100, ymin = 0, ymax = 100), fill = NA, colour = pitch_line_color, size = 0.5) +
-        geom_rect(aes(xmin = 83, xmax = 100, ymin = 21, ymax = 79), fill = NA, colour = pitch_line_color, size = 0.5) +
-        geom_rect(aes(xmin = 100, xmax = 94, ymin = 36.8, ymax = 63.2), fill = NA, colour = pitch_line_color, size = 0.5) +
-        #geom_point(aes(x=50,y=50), colour = viz_color,lwd=2)  +geom_point(aes(x=88.5,y=50), colour = viz_color,lwd=2)+
-        # right D box arc
-        #geom_curve(aes(x = 83, y = 40, xend = 83, yend = 60, colour = "curve"), colour = viz_color, size = 0.5,ncp = 1000)+
-        # centre Kickoff circle
-        #geom_curve(aes(x = 50, y = 36.8, xend = 50, yend = 63.2, colour = "curve"),curvature = 1,colour = viz_color, size = 0.5,ncp = 1000)+
-        #geom_curve(aes(x = 50, y = 63.2, xend = 50, yend = 36.8, colour = "curve"),curvature = 1, colour = viz_color, size = 0.5,ncp = 1000)+
-        theme(panel.grid.major = element_blank(),
-              panel.grid.minor = element_blank(),
-              panel.background = element_rect(fill = "#f9f9fa"),
-              axis.title.y = element_blank(),
-              axis.ticks.y = element_blank(),
-              axis.ticks.x = element_blank(),
-              axis.text.x = element_blank(),
-              axis.text.y = element_blank(),
-              plot.background = element_rect(fill = "#f9f9fa"),
-              plot.title = element_text(colour = title_color,
-                                        size = 26, face ="bold", hjust = 0.5),
-              plot.subtitle = element_text(colour = title_color,
-                                           size = 12, hjust = 0.5),
-              axis.title.x = element_blank(),
-              legend.position = "none",
-              legend.background = element_blank(),
-              legend.text = element_blank(),
-              legend.key = element_blank(),
-              legend.title = element_blank(),
-              text=element_text(size=16)) +
-        geom_segment(aes(x=60,
-                         xend=66.7+data$left[3]-5,
-                         y=20,
-                         yend=20),
-                     size=10,color = alpha(viz_color,data$left[5]/100))+
-        geom_segment(aes(x=60,
-                         xend=66.7+data$center[3]-5,
-                         y=50,
-                         yend=50),
-                     size=10, color = alpha(viz_color,data$center[5]/100))+
-        geom_segment(aes(x=60,
-                         xend=66.7+data$right[3]-5,
-                         y=80,
-                         yend=80),
-                     size=10, color = alpha(viz_color,data$right[5]/100))+
-        geom_polygon(aes(c(66.7+data$left[3]-5,66.7+data$left[3],66.7+data$left[3]-5), c(15,20,25)),
-                     fill = alpha(viz_color,data$left[5]/100))+
-        geom_polygon(aes(c(66.7+data$center[3]-5,66.7+data$center[3],66.7+data$center[3]-5), c(45,50,55)),
-                     fill = alpha(viz_color,data$center[5]/100))+
-        geom_polygon(aes(c(66.7+data$right[3]-5,66.7+data$right[3],66.7+data$right[3]-5), c(75,80,85)),
-                     fill = alpha(viz_color,data$right[5]/100))+
-        geom_text(aes(55,20,label = paste(data$left[2],"%",sep = "")),color=viz_color,size=10) +
-        geom_text(aes(55,50,label = paste(data$center[2],"%",sep = "")),color=viz_color,size=10) +
-        geom_text(aes(55,80,label = paste(data$right[2],"%",sep = "")),color=viz_color,size=10)+
-        annotation_custom(grid::rasterGrob(png::readPNG("./statsbomb.png")
-                                           , interpolate = TRUE)
-                          , xmin = 45, xmax = 50, ymin = 80, ymax = 100)+
-        geom_text(aes(48,10,label = paste("@npranav10")),color=viz_color,size=8)
-    #plotly::ggplotly(p)
-    p
+    ggplot() +
+    labs(title = paste(team_name,"- Entries into Final 3rd"),
+         subtitle = sub_title)+
+    coord_flip() +
+    geom_rect(aes(xmin = 100, xmax = 100.2, ymin = 44.2, ymax = 55.8), fill = pitch_line_color, colour =pitch_line_color , size = 0.5) +
+    geom_rect(aes(xmin = 50, xmax = 100, ymin = 0, ymax = 100), fill = NA, colour = pitch_line_color, size = 0.5) +
+    geom_rect(aes(xmin = 83, xmax = 100, ymin = 21, ymax = 79), fill = NA, colour = pitch_line_color, size = 0.5) +
+    geom_rect(aes(xmin = 100, xmax = 94, ymin = 36.8, ymax = 63.2), fill = NA, colour = pitch_line_color, size = 0.5) +
+    #geom_point(aes(x=50,y=50), colour = viz_color,lwd=2)  +geom_point(aes(x=88.5,y=50), colour = viz_color,lwd=2)+
+    # right D box arc
+    #geom_curve(aes(x = 83, y = 40, xend = 83, yend = 60, colour = "curve"), colour = viz_color, size = 0.5,ncp = 1000)+
+    # centre Kickoff circle
+    #geom_curve(aes(x = 50, y = 36.8, xend = 50, yend = 63.2, colour = "curve"),curvature = 1,colour = viz_color, size = 0.5,ncp = 1000)+
+    #geom_curve(aes(x = 50, y = 63.2, xend = 50, yend = 36.8, colour = "curve"),curvature = 1, colour = viz_color, size = 0.5,ncp = 1000)+
+    theme(panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = "#f9f9fa"),
+          axis.title.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          axis.ticks.x = element_blank(),
+          axis.text.x = element_blank(),
+          axis.text.y = element_blank(),
+          plot.background = element_rect(fill = "#f9f9fa"),
+          plot.title = element_text(colour = title_color,
+                                    size = 26, face ="bold", hjust = 0.5),
+          plot.subtitle = element_text(colour = title_color,
+                                       size = 12, hjust = 0.5),
+          axis.title.x = element_blank(),
+          legend.position = "none",
+          legend.background = element_blank(),
+          legend.text = element_blank(),
+          legend.key = element_blank(),
+          legend.title = element_blank(),
+          text=element_text(size=16)) +
+    geom_segment(aes(x=60,
+                     xend=66.7+data$left[3]-5,
+                     y=20,
+                     yend=20),
+                 size=10,color = alpha(viz_color,data$left[5]/100))+
+    geom_segment(aes(x=60,
+                     xend=66.7+data$center[3]-5,
+                     y=50,
+                     yend=50),
+                 size=10, color = alpha(viz_color,data$center[5]/100))+
+    geom_segment(aes(x=60,
+                     xend=66.7+data$right[3]-5,
+                     y=80,
+                     yend=80),
+                 size=10, color = alpha(viz_color,data$right[5]/100))+
+    geom_polygon(aes(c(66.7+data$left[3]-5,66.7+data$left[3],66.7+data$left[3]-5), c(15,20,25)),
+                 fill = alpha(viz_color,data$left[5]/100))+
+    geom_polygon(aes(c(66.7+data$center[3]-5,66.7+data$center[3],66.7+data$center[3]-5), c(45,50,55)),
+                 fill = alpha(viz_color,data$center[5]/100))+
+    geom_polygon(aes(c(66.7+data$right[3]-5,66.7+data$right[3],66.7+data$right[3]-5), c(75,80,85)),
+                 fill = alpha(viz_color,data$right[5]/100))+
+    geom_text(aes(55,20,label = paste(data$left[2],"%",sep = "")),color=viz_color,size=10) +
+    geom_text(aes(55,50,label = paste(data$center[2],"%",sep = "")),color=viz_color,size=10) +
+    geom_text(aes(55,80,label = paste(data$right[2],"%",sep = "")),color=viz_color,size=10)+
+    annotation_custom(grid::rasterGrob(png::readPNG("./statsbomb.png")
+                                       , interpolate = TRUE)
+                      , xmin = 45, xmax = 50, ymin = 80, ymax = 100)+
+    geom_text(aes(48,10,label = paste("@npranav10")),color=viz_color,size=6)+
+    geom_text(aes(103,15,label = paste("Height: Avg Depth (Attempts)")),color=viz_color,size=4)+
+    geom_text(aes(103,50,label = paste("Color Scale: Success % ")),color=viz_color,size=4)+
+    geom_text(aes(103,85,label = paste("Number(%): Distribution (Attempts)")),color=viz_color,size=4)
+  return(data)
 }
 
 #####################################################################################
